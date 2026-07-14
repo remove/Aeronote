@@ -107,17 +107,10 @@ jobs:
           ssh -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" \
             "bash -s -- '$RELEASE_ID'" < ops/activate-release.sh
 
-      - name: Verify public site
+      - name: Verify deployed origin
         env:
-          RELEASE_ID: ${{ steps.package.outputs.release_id }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
-          curl --fail-with-body --silent --show-error --retry 5 \
-            --output healthz.txt \
-            --write-out 'healthz HTTP %{http_code}\n' \
-            "https://aeronote.net/healthz"
-          grep -qx 'ok' healthz.txt
-
-          curl --fail-with-body --silent --show-error --retry 5 \
-            --output /dev/null \
-            --write-out 'homepage HTTP %{http_code}\n' \
-            "https://aeronote.net/?deployment=${RELEASE_ID}"
+          ssh -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+            "bash -s" < ops/verify-origin.sh

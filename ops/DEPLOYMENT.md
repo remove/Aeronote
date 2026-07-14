@@ -15,9 +15,17 @@ The `v5` branch is the source of truth. A push to this branch triggers
 6. `ops/activate-release.sh` verifies the checksum, extracts a new immutable
    release, validates `index.html`, and atomically switches the `current`
    symlink.
+7. `ops/verify-origin.sh` verifies the live Nginx health endpoint and homepage
+   over HTTPS from the VPS itself.
 
 The deployment workflow never runs `npx quartz create`. The wizard-generated
 `quartz.config.yaml` and `quartz.lock.json` are committed inputs to the build.
+
+The origin check pins `aeronote.net` to `127.0.0.1`, so it validates Nginx, TLS,
+and the activated release without passing through Cloudflare. Public requests
+from GitHub-hosted runners are not used as a deployment gate because
+Cloudflare may reject those runner addresses even while the origin and public
+site are healthy.
 
 ## GitHub environment and secrets
 
