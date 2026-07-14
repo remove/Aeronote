@@ -111,6 +111,13 @@ jobs:
         env:
           RELEASE_ID: ${{ steps.package.outputs.release_id }}
         run: |
-          test "$(curl --fail --silent --show-error --retry 5 https://aeronote.net/healthz)" = "ok"
-          curl --fail --silent --show-error --retry 5 \
-            "https://aeronote.net/?deployment=$RELEASE_ID" > /dev/null
+          curl --fail-with-body --silent --show-error --retry 5 \
+            --output healthz.txt \
+            --write-out 'healthz HTTP %{http_code}\n' \
+            "https://aeronote.net/healthz"
+          grep -qx 'ok' healthz.txt
+
+          curl --fail-with-body --silent --show-error --retry 5 \
+            --output /dev/null \
+            --write-out 'homepage HTTP %{http_code}\n' \
+            "https://aeronote.net/?deployment=${RELEASE_ID}"
