@@ -263,7 +263,8 @@ plugins:
       ref: main
     enabled: true
     order: 50
-    options: {}
+    options:
+      theme: abecedarium
   - source: github:quartz-community/footer
     enabled: true
     order: 50
