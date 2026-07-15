@@ -256,6 +256,10 @@ plugins:
       position: beforeBody
       priority: 15
       display: all
+  - source: github:quartz-community/footer
+    enabled: true
+    order: 50
+    options: {}
   - source:
       name: quartz-themes
       repo: github:saberzero1/quartz-themes
@@ -265,10 +269,6 @@ plugins:
     order: 50
     options:
       theme: abecedarium
-  - source: github:quartz-community/footer
-    enabled: true
-    order: 50
-    options: {}
 layout:
   groups:
     toolbar:
