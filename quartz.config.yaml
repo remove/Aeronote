@@ -260,14 +260,6 @@ plugins:
     enabled: true
     order: 50
     options: {}
-  - source:
-      name: quartz-themes
-      repo: github:saberzero1/quartz-themes
-      subdir: plugin
-    enabled: true
-    order: 50
-    options:
-      theme: abecedarium
 layout:
   groups:
     toolbar:
