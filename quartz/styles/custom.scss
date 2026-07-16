@@ -1,3 +1,235 @@
 @use "./variables.scss" as *;
 
-// put your custom CSS here!
+@font-face {
+  font-family: "Caveat";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/caveat/v23/Wnz6HAc5bAfYB2Q7ZjYYiAzcPA.woff2")
+    format("woff2");
+}
+
+// Aeronote's site skin. Keep customization in this official Quartz extension
+// point so framework and component source files remain untouched.
+
+body {
+  font-kerning: normal;
+  font-synthesis: style;
+  letter-spacing: 0.005em;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(
+      circle at 12% 8%,
+      color-mix(in srgb, var(--tertiary) 5%, transparent),
+      transparent 28rem
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--lightgray) 24%, transparent),
+      transparent 18rem
+    );
+  background-attachment: fixed;
+}
+
+::selection {
+  color: var(--dark);
+  background: var(--textHighlight);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+thead,
+.page-title {
+  font-family: "DM Serif Display", "Songti SC", STSong, serif;
+  letter-spacing: -0.018em;
+}
+
+.page-title {
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+article {
+  font-size: 1.02rem;
+
+  p,
+  li {
+    line-height: 1.78;
+  }
+
+  > h1 {
+    font-size: clamp(2rem, 5vw, 2.7rem);
+    line-height: 1.12;
+    margin-bottom: 1.25rem;
+  }
+
+  h2 {
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--gray) 42%, transparent);
+  }
+
+  a.internal {
+    padding: 0;
+    border-radius: 0;
+    color: var(--secondary);
+    background: transparent;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--tertiary) 72%, transparent);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.18em;
+
+    &:hover {
+      color: var(--tertiary);
+      text-decoration-color: currentColor;
+    }
+
+    &.tag-link {
+      padding: 0.1rem 0.45rem;
+      border: 1px solid color-mix(in srgb, var(--tertiary) 24%, transparent);
+      border-radius: 999px;
+      background: var(--highlight);
+      text-decoration: none;
+    }
+  }
+}
+
+.content-meta,
+.meta {
+  color: var(--gray);
+  font-family: "Caveat", cursive;
+  font-size: 1.08rem;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+}
+
+blockquote {
+  position: relative;
+  margin: 1.75rem 0 1.75rem 2.35rem;
+  padding: 0;
+  border-left: 0;
+  color: var(--darkgray);
+
+  &::before {
+    content: "“";
+    position: absolute;
+    top: -0.1em;
+    left: -2.2rem;
+    color: var(--tertiary);
+    font-family: "DM Serif Display", "Songti SC", STSong, serif;
+    font-size: 3.35rem;
+    line-height: 1;
+    opacity: 0.45;
+  }
+}
+
+hr {
+  height: auto;
+  margin: 2.5rem auto;
+  color: var(--tertiary);
+  background: transparent;
+  text-align: center;
+  overflow: visible;
+
+  &::after {
+    content: "*  *  *";
+    display: inline-block;
+    padding: 0 1rem;
+    font-family: "DM Serif Display", serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.16em;
+  }
+}
+
+code {
+  border: 1px solid color-mix(in srgb, var(--gray) 25%, transparent);
+}
+
+pre {
+  border-color: color-mix(in srgb, var(--gray) 42%, transparent);
+  border-radius: 2px;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--dark) 5%, transparent);
+}
+
+img {
+  border-radius: 2px;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--dark) 8%, transparent),
+    0 10px 28px color-mix(in srgb, var(--dark) 8%, transparent);
+}
+
+.table-container > table {
+  margin-inline: 0;
+}
+
+.breadcrumbs,
+.explorer,
+.toc,
+.backlinks {
+  font-size: 0.92rem;
+}
+
+.explorer-content a.active,
+.toc-content a.in-view {
+  text-decoration: underline;
+  text-decoration-color: var(--tertiary);
+  text-underline-offset: 0.22em;
+}
+
+ul.section-ul {
+  margin-top: 1.5rem;
+}
+
+li.section-li {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--gray) 30%, transparent);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+footer {
+  border-top: 1px solid color-mix(in srgb, var(--gray) 30%, transparent);
+  padding-top: 1.25rem;
+}
+
+@media all and ($mobile) {
+  body {
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--lightgray) 20%, transparent),
+      transparent 12rem
+    );
+  }
+
+  article {
+    font-size: 1rem;
+
+    > h1 {
+      font-size: 2rem;
+    }
+  }
+
+  blockquote {
+    margin-left: 1.75rem;
+
+    &::before {
+      left: -1.65rem;
+      font-size: 2.7rem;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
