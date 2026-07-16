@@ -218,7 +218,7 @@ plugins:
       position: afterBody
       priority: 10
   - source: github:quartz-community/recent-notes
-    enabled: false
+    enabled: true
     options:
       title: Recent Notes
       limit: 5
@@ -260,6 +260,10 @@ plugins:
     enabled: true
     order: 50
     options: {}
+  - source: github:quartz-community/tui
+    enabled: true
+    options: {}
+    order: 50
 layout:
   groups:
     toolbar:
