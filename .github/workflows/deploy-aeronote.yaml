@@ -1,4 +1,4 @@
-name: Deploy Aeronote to VPS
+name: Deploy Aeronote to HK VPS
 
 on:
   push:
@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    name: Build and deploy to Hong Kong
     runs-on: ubuntu-latest
     environment: production
     steps:

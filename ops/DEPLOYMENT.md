@@ -33,12 +33,28 @@ The workflow uses the `production` environment and these repository secrets:
 
 | Secret               | Purpose                                          |
 | -------------------- | ------------------------------------------------ |
-| `DEPLOY_HOST`        | SSH hostname (`los.aerodock.net`)                |
+| `DEPLOY_HOST`        | SSH hostname (`hk.aerodock.net`)                 |
 | `DEPLOY_USER`        | Unprivileged deployment user (`aeronote-deploy`) |
 | `DEPLOY_SSH_KEY`     | Dedicated Ed25519 private key                    |
-| `DEPLOY_KNOWN_HOSTS` | Pinned SSH host key for `los.aerodock.net`       |
+| `DEPLOY_KNOWN_HOSTS` | Pinned SSH host key for `hk.aerodock.net`        |
 
 Never commit private keys, Cloudflare API tokens, or `authorized_keys`.
+
+Administrative SSH uses `ubuntu@hk.aerodock.net`; Actions uses the separate
+`aeronote-deploy` account with no sudo privileges. Pin the host key against
+the host identity verified by the administrative SSH connection before
+updating `DEPLOY_KNOWN_HOSTS`. Update all four deployment secrets together
+after provisioning the new host, then dispatch the workflow on `v5`.
+
+The initial Hong Kong provisioning script is `ops/bootstrap-hk.sh`. Stage it
+beside `ops/nginx/aeronote.net.conf` (named `aeronote.net.conf`) and a new
+deployment public key named `deploy.pub`, then run it with sudo. It backs up
+Nginx under `/var/backups/aeronote-<UTC timestamp>/`, creates the deployment
+account and directories, installs the existing certificate, validates Nginx,
+and reloads it. The website content is published separately by Actions.
+
+Hong Kong runs Nginx 1.24, so the virtual host uses `listen ... ssl http2`
+rather than the `http2 on` directive introduced in Nginx 1.25.1.
 
 ## VPS layout
 
@@ -70,3 +86,17 @@ TLS certificates are installed at
 `/etc/nginx/ssl/aeronote.net/{fullchain,privkey}.pem` and renewed by acme.sh
 using Cloudflare DNS-01. Certificate credentials are intentionally not stored
 in this repository.
+
+acme.sh runs as `ubuntu`, from `/home/ubuntu/.acme.sh`. Its `--install-cert`
+configuration copies renewed certificates to the Nginx paths above and runs
+`sudo -n /usr/sbin/nginx -t && sudo -n /usr/bin/systemctl reload nginx`.
+`/etc/sudoers.d/aeronote-renewal` permits only these two exact commands without
+a password. The certificate directory is owned by `ubuntu` with mode 700;
+the private key has mode 600. Do not point Nginx directly at acme.sh's internal
+certificate storage.
+
+To undo the initial virtual host activation, restore the prior
+`aeronote.net.conf` from the timestamped Nginx backup, or remove only this
+virtual host if it did not previously exist. Run `nginx -t` before reloading.
+The backup is a local configuration backup, not a provider snapshot or an
+off-host backup. Confirm a separate backup before subsequent major changes.
