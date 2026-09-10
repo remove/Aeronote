@@ -151,7 +151,7 @@ plugins:
     enabled: true
     layout:
       position: left
-      priority: 20
+      priority: 25
       group: toolbar
       groupOptions:
         grow: true
@@ -180,6 +180,7 @@ plugins:
     layout:
       position: left
       priority: 10
+      display: all
   - source: github:quartz-community/darkmode
     enabled: true
     layout:
@@ -226,7 +227,8 @@ plugins:
       showTags: true
     layout:
       position: left
-      priority: 25
+      priority: 20
+      display: desktop-only
   - source: github:quartz-community/spacer
     enabled: true
     options: {}
