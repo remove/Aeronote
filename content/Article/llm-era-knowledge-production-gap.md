@@ -1,9 +1,9 @@
 ---
 publish: true
-permalink: "321321"
+permalink: "3213213123"
 title: LLM 时代的知识生产能力鸿沟：一个关于人才再生产的假说
 created: 2026-09-07T10:36:21.698Z
-modified: 2026-09-09T08:09:26.195Z
+modified: 2026-09-09T08:33:53.875Z
 ---
 
 ## 1. 问题提出与核心假说
