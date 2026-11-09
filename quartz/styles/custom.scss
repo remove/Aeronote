@@ -1,227 +1,345 @@
 @use "./variables.scss" as *;
 
 @font-face {
-  font-family: "Caveat";
+  font-family: "biro_script_standardRgus";
   font-style: normal;
   font-weight: 400 600;
   font-display: swap;
-  src: url("https://fonts.gstatic.com/s/caveat/v23/Wnz6HAc5bAfYB2Q7ZjYYiAzcPA.woff2")
-    format("woff2");
+  src: url("/static/font/biro_script_standard_us.woff2") format("woff2");
 }
 
-// Aeronote's site skin. Keep customization in this official Quartz extension
-// point so framework and component source files remain untouched.
-
+// Keep the site skin in Quartz's supported customization layer.
 body {
-  font-kerning: normal;
-  font-synthesis: style;
-  letter-spacing: 0.005em;
+  position: relative;
   min-height: 100vh;
-  background-image: none;
+  font-synthesis: style;
+}
 
-  // A quiet, fixed paper grain over the flat page colour. The SVG is embedded
-  // locally, so the texture adds no asset or network dependency.
-  &::before {
-    content: "";
-    position: fixed;
-    z-index: 9999;
-    inset: 0;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='.42'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
-    mix-blend-mode: multiply;
-    opacity: 0.075;
+#quartz-root {
+  isolation: isolate;
+}
+
+// Match the reference site's restrained page width and three-column desktop
+// rhythm while keeping Quartz's responsive breakpoints.
+.page {
+  max-width: 1400px;
+}
+
+// The left sidebar is the compact header row: title on the left, controls on
+// the right. It becomes a single full-width row on smaller screens.
+.sidebar.left {
+  gap: 1.2rem;
+
+  & > .flex-component {
+    align-items: center;
+    width: 100%;
+  }
+
+  .page-title {
+    margin: 0;
+    white-space: nowrap;
+    font-size: 1.75rem;
   }
 }
 
-[saved-theme="dark"] body::before {
-  mix-blend-mode: soft-light;
-  opacity: 0.055;
+@media all and ($mobile) {
+  .sidebar.left {
+    align-items: center;
+    gap: 0;
+    padding-top: 2rem;
+  }
+
+  .sidebar.left > .flex-component {
+    width: 100%;
+  }
+
+  .sidebar.left .page-title {
+    margin: 0;
+    white-space: nowrap;
+    font-size: 1.75rem;
+  }
 }
 
-::selection {
-  color: var(--dark);
-  background: var(--textHighlight);
+// Search is an icon-only control in the reference header.
+.search {
+  min-width: 0;
+  max-width: none;
+
+  & > .search-button {
+    width: auto;
+    height: 20px;
+    padding: 0;
+    border: none;
+
+    & > p {
+      display: none;
+    }
+
+    & > svg {
+      width: 16px;
+      min-width: 16px;
+      height: 16px;
+      margin: 0;
+    }
+  }
 }
 
+// Keep the theme toggle aligned with the search icon.
+.darkmode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+
+  & > svg {
+    position: static;
+  }
+}
+
+// Match the reference typography and spacing.
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-thead,
-.page-title {
-  font-family: "DM Serif Display", "Songti SC", STSong, serif;
-  letter-spacing: -0.018em;
+thead {
+  font-family: var(--headerFont);
+  font-weight: revert;
 }
 
-.page-title {
-  font-weight: 400;
-  letter-spacing: -0.025em;
+h1 {
+  margin-top: 2.25rem;
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+}
+
+h2 {
+  margin-top: 1.9rem;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+h3 {
+  margin-top: 1.62rem;
+  margin-bottom: 1rem;
+  font-size: 1.12rem;
+}
+
+h4,
+h5,
+h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
 }
 
 article {
-  font-size: 1.02rem;
+  font-size: 1rem;
 
   p,
   li {
-    line-height: 1.78;
+    line-height: 1.6rem;
   }
 
-  > h1 {
-    font-size: clamp(2rem, 5vw, 2.7rem);
-    line-height: 1.12;
-    margin-bottom: 1.25rem;
+  & > h1 {
+    font-size: 2rem;
+    line-height: normal;
+  }
+}
+
+// Use simple underlines for prose links instead of Quartz's pill highlight.
+article a.internal {
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+  text-decoration: underline;
+  text-decoration-color: var(--tertiary);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+
+  &:has(> img) {
+    text-decoration: none;
   }
 
-  h2 {
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--gray) 42%, transparent);
-  }
-
-  a.internal {
-    padding: 0;
-    border-radius: 0;
-    color: var(--secondary);
-    background: transparent;
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--tertiary) 72%, transparent);
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 0.18em;
+  &.tag-link {
+    margin: 0 0.1rem;
+    padding: 0.2rem 0.4rem;
+    color: var(--tertiary);
+    background-color: color-mix(in srgb, var(--tertiary) 12%, transparent);
+    text-decoration: none;
 
     &:hover {
       color: var(--tertiary);
-      text-decoration-color: currentColor;
-    }
-
-    &.tag-link {
-      padding: 0.1rem 0.45rem;
-      border: 1px solid color-mix(in srgb, var(--tertiary) 24%, transparent);
-      border-radius: 999px;
-      background: var(--highlight);
-      text-decoration: none;
+      background-color: color-mix(in srgb, var(--tertiary) 20%, transparent);
     }
   }
 }
 
-.content-meta,
-.meta {
-  color: var(--gray);
-  font-family: "Caveat", cursive;
-  font-size: 1.08rem;
-  font-style: normal;
-  font-weight: 500;
-  letter-spacing: 0.015em;
+[saved-theme] a:hover {
+  color: var(--tertiary);
 }
 
+// Keep the reference site's decorative quote mark and scene break.
 blockquote {
   position: relative;
-  margin: 1.75rem 0 1.75rem 2.35rem;
-  padding: 0;
-  border-left: 0;
-  color: var(--darkgray);
+  margin: 1.5rem 0 1.5rem 2.5rem;
+  padding-left: 0;
+  border-left: none;
 
   &::before {
-    content: "“";
+    content: "\201C";
     position: absolute;
-    top: -0.1em;
-    left: -2.2rem;
-    color: var(--tertiary);
-    font-family: "DM Serif Display", "Songti SC", STSong, serif;
-    font-size: 3.35rem;
+    top: 0;
+    left: -2.5rem;
+    transform: translateY(-0.08em);
+    color: var(--secondary);
+    font-family: var(--headerFont);
+    font-size: 3.5rem;
     line-height: 1;
-    opacity: 0.45;
+    opacity: 0.4;
   }
 }
 
 hr {
-  height: auto;
-  margin: 2.5rem auto;
-  color: var(--tertiary);
-  background: transparent;
+  width: 100%;
+  height: 0;
+  margin: 2em auto;
+  padding: 0;
+  border: none;
   text-align: center;
   overflow: visible;
 
   &::after {
-    content: "*  *  *";
+    content: "* * *";
     display: inline-block;
-    padding: 0 1rem;
-    font-family: "DM Serif Display", serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.16em;
+    margin: -1em 0 0.5em;
+    padding: 0.5em 1em;
+    color: var(--tertiary);
+    font-size: 1.5em;
   }
 }
 
-code {
-  border: 1px solid color-mix(in srgb, var(--gray) 25%, transparent);
+.meta,
+.content-meta {
+  color: var(--darkgray);
+  font-family: "biro_script_standardRgus", var(--bodyFont);
 }
 
-pre {
-  border-color: color-mix(in srgb, var(--gray) 42%, transparent);
-  border-radius: 2px;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--dark) 5%, transparent);
+// Recent notes and list pages use the same quiet hierarchy as the reference.
+.recent-notes > h3 {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
 }
 
-img {
-  border-radius: 2px;
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--dark) 8%, transparent),
-    0 10px 28px color-mix(in srgb, var(--dark) 8%, transparent);
+.recent-notes > ul.recent-ul {
+  margin-top: 1rem;
+  padding-left: 0;
+  list-style: none;
+
+  & > li {
+    margin: 1rem 0;
+
+    .section > .desc > h3 > a {
+      background-color: transparent;
+    }
+
+    .section > .meta {
+      margin: 0 0 0.5rem;
+      opacity: 0.6;
+    }
+  }
 }
 
-.table-container > table {
-  margin-inline: 0;
-}
-
-.breadcrumbs,
-.explorer,
-.toc,
-.backlinks {
-  font-size: 0.92rem;
-}
-
-.explorer-content a.active,
-.toc-content a.in-view {
+a.see-more {
+  color: var(--darkgray);
+  font-weight: 400;
   text-decoration: underline;
-  text-decoration-color: var(--tertiary);
-  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  opacity: 0.6;
+
+  &:hover {
+    color: var(--darkgray);
+    opacity: 0.85;
+  }
 }
 
 ul.section-ul {
-  margin-top: 1.5rem;
+  margin-top: 2em;
+  padding-left: 0;
+  list-style: none;
 }
 
 li.section-li {
-  padding: 0.85rem 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--gray) 30%, transparent);
+  margin-bottom: 1em;
 
-  &:last-child {
-    border-bottom: 0;
+  & > .section {
+    display: grid;
+    grid-template-columns: 7em 3fr 1fr;
   }
 }
 
+// Keep list-page rows compact and aligned with the reference hierarchy.
+.section h3,
+.section > .tags {
+  margin: 0;
+}
+
+li.section-li > .section > .desc > h3 > a {
+  background-color: transparent;
+}
+
+li.section-li > .section .meta {
+  margin: 0 1em 0 0;
+  opacity: 0.6;
+}
+
+// Match the reference theme's light code and media surfaces.
+figure[data-rehype-pretty-code-figure] > [data-rehype-pretty-code-title],
+pre,
+code {
+  border-radius: 5px;
+}
+
+img {
+  border-radius: 5px;
+  box-shadow: none;
+}
+
 footer {
-  border-top: 1px solid color-mix(in srgb, var(--gray) 30%, transparent);
-  padding-top: 1.25rem;
+  padding-bottom: 4rem;
+  text-align: left;
+  opacity: 0.6;
+}
+
+footer ul {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin: -1rem 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 @media all and ($mobile) {
-  article {
-    font-size: 1rem;
-
-    > h1 {
-      font-size: 2rem;
-    }
+  // The reference collapses its auxiliary desktop column completely on mobile.
+  .sidebar.right {
+    display: none;
   }
 
   blockquote {
     margin-left: 1.75rem;
 
     &::before {
-      left: -1.65rem;
-      font-size: 2.7rem;
+      left: -1.75rem;
+      font-size: 2.75rem;
     }
+  }
+
+  li.section-li > .section {
+    display: block;
   }
 }
 

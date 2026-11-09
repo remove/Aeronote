@@ -13,10 +13,14 @@ configuration:
     - templates
     - .obsidian
   theme:
-    fontOrigin: googleFonts
+    # Font loading is handled by the Quartz Fonts plugin below so the head does not
+    # inject a second duplicate Google Fonts stylesheet.
+    fontOrigin: local
     cdnCaching: true
     typography:
-      header: DM Serif Display
+      header:
+        name: DM Serif Display
+        weights: [400]
       body: Bricolage Grotesque
       code: JetBrains Mono
     colors:
@@ -100,6 +104,16 @@ plugins:
     order: 92
   - source: "@quartz-community/quartz-fonts"
     enabled: true
+    options:
+      fontOrigin: googleFonts
+      title:
+        name: DM Serif Display
+        weights: [400]
+      header:
+        name: DM Serif Display
+        weights: [400]
+      body: Bricolage Grotesque
+      code: JetBrains Mono
   - source: "@quartz-community/explicit-publish"
     enabled: false
   - source: "@quartz-community/unlisted-pages"
@@ -131,28 +145,18 @@ plugins:
   - source: "@quartz-community/tag-page"
     enabled: true
   - source: "@quartz-community/explorer"
-    enabled: true
-    layout:
-      position: left
-      priority: 50
+    enabled: false
   - source: "@quartz-community/graph"
-    enabled: true
-    layout:
-      position: right
-      priority: 10
+    enabled: false
   - source: "@quartz-community/search"
     enabled: true
     layout:
       position: left
-      priority: 25
+      priority: 20
       group: toolbar
-      groupOptions:
-        grow: true
+      display: all
   - source: "@quartz-community/backlinks"
-    enabled: true
-    layout:
-      position: right
-      priority: 50
+    enabled: false
   - source: "@quartz-community/article-title"
     enabled: true
     layout:
@@ -173,6 +177,9 @@ plugins:
     layout:
       position: left
       priority: 10
+      group: toolbar
+      groupOptions:
+        grow: true
       display: all
   - source: "@quartz-community/darkmode"
     enabled: true
@@ -180,12 +187,9 @@ plugins:
       position: left
       priority: 30
       group: toolbar
+      display: all
   - source: "@quartz-community/reader-mode"
-    enabled: true
-    layout:
-      position: left
-      priority: 35
-      group: toolbar
+    enabled: false
   - source: "@quartz-community/breadcrumbs"
     enabled: true
     layout:
@@ -211,6 +215,7 @@ plugins:
     layout:
       position: afterBody
       priority: 10
+      condition: not-index
   - source: "@quartz-community/recent-notes"
     enabled: true
     options:
@@ -222,14 +227,22 @@ plugins:
       position: left
       priority: 20
       display: desktop-only
-  - source: "@quartz-community/spacer"
+  - source: "@quartz-community/recent-notes"
     enabled: true
+    options:
+      title: Recent Notes
+      limit: 5
+      linkToMore: false
+      showTags: true
+    layout:
+      position: afterBody
+      priority: 20
+      display: mobile-only
+  - source: "@quartz-community/spacer"
+    enabled: false
     options: {}
     order: 25
-    layout:
-      position: left
-      priority: 25
-      display: mobile-only
+    layout: null
   - source: "@quartz-community/bases-page"
     enabled: true
     options: {}
@@ -255,14 +268,15 @@ plugins:
     enabled: true
     order: 50
     options: {}
+  # The CLI launches this Bun-only utility separately from the site build.
   - source: github:quartz-community/tui
-    enabled: true
+    enabled: false
     options: {}
     order: 50
 layout:
   groups:
     toolbar:
-      priority: 35
+      priority: 10
       direction: row
       gap: 0.5rem
   byPageType: {}
